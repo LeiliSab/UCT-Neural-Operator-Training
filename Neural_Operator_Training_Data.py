@@ -136,12 +136,6 @@ record_time = 1.3 * (extent[1] - extent[0]) / c_min
 print(f"record_time = {record_time * 1e3:.2f} ms")
 
 
-# Debug: Check actual number of active transducers
-print(f"Requested transducers: {n_tx}")
-print(f"Actual tx transducers: {np.sum(tx_array.is_tx)}")
-print(f"Actual rx transducers: {np.sum(tx_array.is_rx)}")
-print(f"Total positions: {tx_array.positions.shape[1]}")
-
 # (4) AcquisitionData
 acq_data = AcquisitionData.from_geometry(tx_array=tx_array, grid=img_grid_padded)
 
@@ -177,36 +171,14 @@ op_true = WaveOperator(
 # Note: We'll use 128x128 time-domain data but process on 180x180 frequency grid
 fname_128 = SAVE_DIR / f"d_obs_128x128_1mm_0p3MHz_new_368.npz"
 
-print("Loading existing 128x128 acquisition data...")
-try:
-    import numpy as np
-    # Load the raw numpy data 
-    npz_data = np.load(fname_128)
-    print(f"Available keys in {fname_128}: {list(npz_data.keys())}")
     
-    # Extract the time-domain data array
-    acq_array = npz_data['array']  # Shape should be (Tx, Rx, nt)
-    time_axis = npz_data['time_axis']
-    
-    print(f"Acquisition data shape: {acq_array.shape}")
-    print(f"Time axis shape: {time_axis.shape}")
-    
-    # Create AcquisitionData object manually with our current grid
-    acq_data_for_freq = AcquisitionData(
-        array=acq_array, 
-        time_axis=time_axis,
-        grid=img_grid_padded,  # Use our 180x180 grid
-        tx_array=tx_array
-    )
-    print("Successfully created AcquisitionData with 180x180 grid")
-    
-except Exception as e:
-    print(f"Error loading data: {e}")
-    print("Will need to run time-domain simulation...")
-    acq_sim = op_true.simulate()
-    fname = SAVE_DIR / f"d_obs_180x180_1mm_0p3MHz_new_368.npz"
-    acq_sim.save(fname)
-    acq_data_for_freq = acq_sim
+
+print(f"Error loading data: {e}")
+print("Will need to run time-domain simulation...")
+acq_sim = op_true.simulate()
+fname = SAVE_DIR / f"d_obs_180x180_1mm_0p3MHz_new_368.npz"
+acq_sim.save(fname)
+acq_data_for_freq = acq_sim
 
 
 ###########SIMULATE#######################
@@ -603,7 +575,7 @@ for sample in training_data:
     c_xy_tensor[freq_idx, :, :] = sample['c_xy']  # Same for all TX at this freq
     frequency_array[freq_idx] = sample['frequency']
 
-print(f"✅ Tensor organization complete!")
+print(f"Tensor organization complete!")
 print(f"  ui_tensor shape: {ui_tensor.shape} (N_freqs, ny, nx, n_tx)")
 print(f"  us_tensor shape: {us_tensor.shape} (N_freqs, ny, nx, n_tx)")
 print(f"  c_xy_tensor shape: {c_xy_tensor.shape} (N_freqs, ny, nx)")
