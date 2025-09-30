@@ -1,0 +1,14 @@
+beartype==0.21.0
+cupy==13.6.0
+deepdiff==8.6.0
+Deprecated==1.2.18
+gdown==5.2.0
+h5py==3.13.0
+jaxtyping==0.3.2
+matplotlib==3.10.5
+numpy==2.3.2
+opencv_python==4.11.0.86
+pytest==8.4.1
+scipy==1.16.1
+testfixtures==8.3.0
+tqdm==4.67.1
