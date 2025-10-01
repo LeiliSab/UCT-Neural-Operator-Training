@@ -1,3 +1,5 @@
+This is an extension to Wei Liao's research project, with the objective of creating training data for a neural operator. The work is all his, except the file Neural_Operator_Training_Data.py which is my own.
+
 # PHAS0077 Research Project
 Student: Wei Liao
 
@@ -19,7 +21,9 @@ This repository contains the code accompanying the project paper “A Flexible P
   Uses breast phantom data simulated with k-Wave from the code repository of Ali et al.
   The dataset is included in the Releases section of this repository.
   For the time-domain example, the corresponding sound-speed field was resampled from this dataset.
-
+- **Neural_Operator_Training_Data.py**
+  Example script creating incident, scattered and total wavefields from the UIUC dataset (as in the releases section).
+  Creating of training data at the end of the file.
 
 # Environment Setup
 To run the code locally, follow the steps below.
